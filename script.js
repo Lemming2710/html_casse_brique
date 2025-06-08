@@ -1,5 +1,8 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
+const scoreElement = document.getElementById('score');
+const messageElement = document.getElementById('message');
+const startButton = document.getElementById('startButton');
 
 const paddleHeight = 10;
 const paddleWidth = 75;
@@ -8,22 +11,34 @@ let paddleX = (canvas.width - paddleWidth) / 2;
 const ballRadius = 8;
 let x = canvas.width / 2;
 let y = canvas.height - 30;
-let dx = 2;
-let dy = -2;
+let dx = 3;
+let dy = -3;
 
-const brickRowCount = 3;
-const brickColumnCount = 5;
-const brickWidth = 75;
+const brickRowCount = 5;
+const brickColumnCount = 8;
+const brickWidth = 50;
 const brickHeight = 20;
 const brickPadding = 10;
 const brickOffsetTop = 30;
-const brickOffsetLeft = 30;
+const brickOffsetLeft = 15;
+
+let score = 0;
+let gameStarted = false;
+let gameOver = false;
+
+// Couleurs pour les briques
+const brickColors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD'];
 
 const bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
   bricks[c] = [];
   for (let r = 0; r < brickRowCount; r++) {
-    bricks[c][r] = { x: 0, y: 0, status: 1 };
+    bricks[c][r] = { 
+      x: 0, 
+      y: 0, 
+      status: 1,
+      color: brickColors[Math.floor(Math.random() * brickColors.length)]
+    };
   }
 }
 
@@ -57,6 +72,15 @@ function collisionDetection() {
         if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
           dy = -dy;
           b.status = 0;
+          score += 10;
+          scoreElement.textContent = score;
+          
+          if (score === brickRowCount * brickColumnCount * 10) {
+            gameOver = true;
+            messageElement.textContent = "Félicitations ! Vous avez gagné !";
+            startButton.style.display = 'block';
+            startButton.textContent = 'Rejouer';
+          }
         }
       }
     }
@@ -89,15 +113,40 @@ function drawBricks() {
         bricks[c][r].y = brickY;
         ctx.beginPath();
         ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        ctx.fillStyle = '#0095DD';
+        ctx.fillStyle = bricks[c][r].color;
         ctx.fill();
+        ctx.strokeStyle = '#000';
+        ctx.strokeRect(brickX, brickY, brickWidth, brickHeight);
         ctx.closePath();
       }
     }
   }
 }
 
+function resetGame() {
+  score = 0;
+  scoreElement.textContent = score;
+  x = canvas.width / 2;
+  y = canvas.height - 30;
+  dx = 3;
+  dy = -3;
+  paddleX = (canvas.width - paddleWidth) / 2;
+  
+  // Réinitialiser les briques
+  for (let c = 0; c < brickColumnCount; c++) {
+    for (let r = 0; r < brickRowCount; r++) {
+      bricks[c][r].status = 1;
+      bricks[c][r].color = brickColors[Math.floor(Math.random() * brickColors.length)];
+    }
+  }
+  
+  gameOver = false;
+  messageElement.textContent = '';
+}
+
 function draw() {
+  if (!gameStarted || gameOver) return;
+  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBricks();
   drawBall();
@@ -113,7 +162,11 @@ function draw() {
     if (x > paddleX && x < paddleX + paddleWidth) {
       dy = -dy;
     } else {
-      document.location.reload();
+      gameOver = true;
+      messageElement.textContent = "Game Over !";
+      startButton.style.display = 'block';
+      startButton.textContent = 'Rejouer';
+      return;
     }
   }
 
@@ -128,5 +181,16 @@ function draw() {
   requestAnimationFrame(draw);
 }
 
-draw();
+startButton.addEventListener('click', () => {
+  resetGame();
+  gameStarted = true;
+  startButton.style.display = 'none';
+  messageElement.textContent = 'Bonne chance !';
+  setTimeout(() => {
+    if (gameStarted) messageElement.textContent = '';
+  }, 2000);
+  draw();
+});
 
+// Afficher le message initial
+messageElement.textContent = 'Cliquez sur "Commencer le jeu" pour démarrer !';
