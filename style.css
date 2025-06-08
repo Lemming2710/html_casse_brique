@@ -4,10 +4,44 @@ body {
   text-align: center;
   margin: 0;
   padding: 0;
+  color: white;
+}
+
+#gameContainer {
+  width: 480px;
+  margin: 20px auto;
 }
 
 canvas {
   display: block;
-  margin: 40px auto;
+  margin: 10px auto;
   background: #eee;
+}
+
+#scoreContainer {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+#message {
+  font-size: 20px;
+  margin-top: 10px;
+  color: #fff;
+  min-height: 30px;
+}
+
+#startButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #0095DD;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#startButton:hover {
+  background-color: #0077aa;
 }
