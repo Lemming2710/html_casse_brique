@@ -1,0 +1,27 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "Test de casse brique html v2",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:js": "esbuild script.js --bundle=false --minify --legal-comments=none --outfile=script.min.js",
+    "build:css": "lightningcss -m -o style.min.css style.css",
+    "build": "npm run build:js && npm run build:css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lemming2710/html_casse_brique.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lemming2710/html_casse_brique/issues"
+  },
+  "homepage": "https://github.com/Lemming2710/html_casse_brique#readme",
+  "devDependencies": {
+    "esbuild": "^0.25.8",
+    "lightningcss-cli": "^1.30.1"
+  }
+}
