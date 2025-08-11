@@ -2,8 +2,10 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Casse Brique</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="preload" as="style" href="style.min.css">
+  <link rel="stylesheet" href="style.min.css">
 </head>
 <body>
   <div id="gameContainer">
@@ -12,6 +14,6 @@
     <div id="message"></div>
     <button id="startButton">Commencer le jeu</button>
   </div>
-  <script src="script.js"></script>
+  <script defer src="script.min.js"></script>
 </body>
 </html>
